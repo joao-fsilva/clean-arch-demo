@@ -1,0 +1,36 @@
+version: '3.1'
+services:
+  cademo-dev-php:
+    build:
+      dockerfile: ./../php.dockerfile
+      context: .
+    image: cademo/php
+    restart: ${RESTART_POLICY}
+    container_name: cademo-dev-php
+    volumes:
+      - "${PROJECT_FOLDER}:/www/clean-arch-demo-back-end"
+      - "${PHP_LOG_DIR}:/var/log/php"
+      - './php/overrides.php.ini:/usr/local/etc/php/conf.d/99-overrides.php.ini'
+    networks:
+      - cademo-dev-network
+  cademo-dev-nginx:
+    build:
+      dockerfile: ./../nginx.dockerfile
+      context: .
+    image: cademo/nginx
+    restart: ${RESTART_POLICY}
+    container_name: cademo-dev-nginx
+    volumes:
+      - "${PROJECT_FOLDER}:/www/clean-arch-demo-back-end"
+      - "${NGINX_LOG_DIR}:/var/log/nginx"
+      - './nginx/nginx.conf:/etc/nginx/nginx.conf'
+      - './nginx/conf.d:/etc/nginx/conf.d'
+    ports:
+      - "${HTTP_PORT}:80"
+    networks:
+      - cademo-dev-network
+    depends_on:
+      - "cademo-dev-php"
+networks:
+  cademo-dev-network:
+    driver: bridge
