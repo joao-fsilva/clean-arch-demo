@@ -7,7 +7,7 @@ This project demonstrates the use of Clean Architecture.
 
 The core of the system is in the "Demo" directory. In the infrastructure layer Lumen is used. 
 
-Layer list:
+Layer's list:
 
 1. Domain
 2. Application
